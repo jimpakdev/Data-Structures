@@ -12,10 +12,9 @@ class LRUCache:
   # current number of nodes being held
   # DLL (import this)
   # storage dict 
-  def __init__(self, limit=10):    
-    self.size = 0    
-    self.storage = DoublyLinkedList()    
-    self.cache = LRUCache()              
+  def __init__(self, limit=10):     
+    self.limit = limit 
+    self.cache = {}         
   
 
   """
@@ -30,11 +29,13 @@ class LRUCache:
   # move key-value pair to end of the order
 
   def get(self, key):
-    if self.key in self.storage:                     # check if the key exists
-      value = self.storage.node.value                # if yes, return its value
-      self.storage.move_to_end(self.storage.node)    # and move the pair to the end
-      return value
-    else:                                            # if key does not exist, return None
+    if key in self.cache:                         
+      val = self.cache[key]   
+      self.cache.pop(key)  
+      self.cache[key] = val                      # check if the key exists
+      return self.cache[key]                           # if yes, return its value
+                                                       # and move the pair to the end
+    else:                                              # if key does not exist, return None
       return None
 
   """
@@ -48,4 +49,17 @@ class LRUCache:
   the newly-specified value. 
   """
   def set(self, key, value):
-    pass
+    # check if it is already in cache, overwrite with new value
+    # if not in the cache, add to the end 
+    # if cache is at max, remove oldest entry (the head)
+    if len(self.cache) == self.limit:
+      self.cache.pop(list(self.cache)[0])
+    self.cache[key] = value  
+    
+    
+      
+
+        
+
+    
+
