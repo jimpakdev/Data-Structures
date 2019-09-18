@@ -13,8 +13,16 @@ class LRUCache:
   # DLL (import this)
   # storage dict 
   def __init__(self, limit=10):     
+    # self.limit = limit 
+    # self.size = 0
+    # self.cache = {}         
+
+
+    # Brian's way
     self.limit = limit 
-    self.cache = {}         
+    self.size = 0
+    self.storage = {}   
+    self.order = DoublyLinkedList()
   
 
   """
@@ -29,13 +37,21 @@ class LRUCache:
   # move key-value pair to end of the order
 
   def get(self, key):
-    if key in self.cache:                         
-      val = self.cache[key]   
-      self.cache.pop(key)  
-      self.cache[key] = val                      # check if the key exists
-      return self.cache[key]                           # if yes, return its value
-                                                       # and move the pair to the end
-    else:                                              # if key does not exist, return None
+
+    # if key in self.cache:                         
+    #   val = self.cache[key]   
+    #   self.cache.pop(key)  
+    #   self.cache[key] = val                     
+    #   return self.cache[key]                                                                                
+    # else:                                              
+    #   return None
+
+    # Brian's way
+    if key in self.storage:
+      node = self.storage[key]
+      self.order.move_to_front(node)
+      return node.value[1]
+    else:
       return None
 
   """
@@ -52,9 +68,34 @@ class LRUCache:
     # check if it is already in cache, overwrite with new value
     # if not in the cache, add to the end 
     # if cache is at max, remove oldest entry (the head)
-    if len(self.cache) == self.limit:
-      self.cache.pop(list(self.cache)[0])
-    self.cache[key] = value  
+
+    # if len(self.cache) == self.limit and self.get(key) == None:
+    #   self.cache.pop(list(self.cache)[0])
+    #   self.size -= 1
+    # self.cache[key] = value  
+    # self.size += 1
+
+
+    # Brian's way
+    # If already exist, overwrite value
+    if key in self.storage:
+    # update dict
+      node = self.storage[key]
+      node.value = (key, value)
+      # Mark as most recently used, put in the head of DLL
+      self.order.move_to_front(node)
+      return
+    # If at max capacity, dump oldest - remove from tail of DLL
+    if self.size == self.limit:
+      del self.storage[self.order.tail.value[0]]
+      self.order.remove_from_tail()
+      self.size -= 1
+    # Add pair to the cache - add to dict and add it to nodes/DLL
+    self.order.add_to_head((key, value))
+    self.storage[key] = self.order.head
+    self.size += 1
+
+
     
     
       
