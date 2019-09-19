@@ -27,13 +27,13 @@ class BinarySearchTree:
       self.value = value
 
     elif self.value >= value:
-      if self.left is None:
+      if self.left == None:
         self.left = BinarySearchTree(value)
       else:
         self.left.insert(value)
 
     else:
-      if self.right is None:
+      if self.right == None:
         self.right = BinarySearchTree(value)
       else:
         self.right.insert(value)
@@ -48,17 +48,42 @@ class BinarySearchTree:
   def contains(self, target):
     if self.value == target:
       return True
-    elif self.value < target:
-      self.right
     
+    elif self.value > target:
+      if self.right == None:
+        return False
+      else:
+        return self.right.contains(target)
     
+    else:
+      if self.left == None:
+        return False
+      else:
+        return self.right.contains(target)
+
 
   # * `get_max` returns the maximum value in the binary search tree.
   def get_max(self):
-    pass
+    current = self
 
+    while current.right != None:
+      current = current.right
+    return current.value
+      
   # * `for_each` performs a traversal of _every_ node in the tree, executing
   # the passed-in callback function on each tree node value. There is a myriad of ways to
   # perform tree traversal; in this case any of them should work. 
   def for_each(self, cb):
-    pass
+    current = self 
+    cb(current.value)    #### perform callback on root first
+
+    if current.left != None:
+      current.left.for_each(cb)
+      
+    if current.right != None:
+      current.right.for_each(cb)
+
+
+
+
+
