@@ -89,20 +89,10 @@ class BinarySearchTree:
 # Print all the values in order from low to high
 # Hint:  Use a recursive, depth first traversal
   def in_order_dft(self, node):
-    order_nums = []
-    self.stack.push(node.value)
-    order_nums.append(node.value)
-
-    while self.stack.size != 0:
-      self.stack.pop()
-      if self.left:
-        self.stack.push(self.left.value)
-        order_nums.append(self.left.value)
-      if self.right:
-        self.stack.push(self.right.value)
-        order_nums.append(self.right.value)
-    print( order_nums.sort() )
-    
+    if node:
+      self.in_order_dft(node.left)
+      print(node.value)
+      self.in_order_dft(node.right)
 
 # Print the value of every node, starting with the given node,
 # in an iterative breadth first traversal
@@ -116,17 +106,17 @@ class BinarySearchTree:
 # shift 
 # go to head of queue and continue 
   def bft_print(self, node):
-    self.queue.enqueue(node.value)
-    print(node.value)
+    self.queue.enqueue(node)
     
     while self.queue.size != 0:
-      self.queue.dequeue()
-      if self.left:
-        self.queue.enqueue(self.left.value)
-        print(self.left.value)
-      if self.right:
-        self.queue.enqueue(self.right.value)
-        print(self.right.value)
+      current = self.queue.dequeue()
+      print(current.value)
+      if current.left:
+        self.queue.enqueue(current.left)
+      if current.right:
+        self.queue.enqueue(current.right)
+        
+
 
 # Print the value of every node, starting with the given node,
 # in an iterative depth first traversal
@@ -140,17 +130,16 @@ class BinarySearchTree:
 # check root.right and put it in stack
 # go to top of stack and continue
   def dft_print(self, node):
-    self.stack.push(node.value)
-    print(node.value)
-
+    self.stack.push(node)
+    
     while self.stack.size != 0:
-      self.stack.pop()
-      if self.left:
-        self.stack.push(self.left.value)
-        print(self.left.value)
-      if self.right:
-        self.stack.push(self.right.value)
-        print(self.right.value)
+      current = self.stack.pop()
+      print(current.value)
+      if current.left:
+        self.stack.push(current.left)        
+      if current.right:
+        self.stack.push(current.right)
+
     
     
 # STRETCH Goals -------------------------
